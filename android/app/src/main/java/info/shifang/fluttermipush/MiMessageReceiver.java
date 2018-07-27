@@ -6,6 +6,22 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
+import io.flutter.plugin.common.BasicMessageChannel;
+import io.flutter.plugin.common.BasicMessageChannel.MessageHandler;
+import io.flutter.plugin.common.BasicMessageChannel.Reply;
+import io.flutter.plugin.common.StringCodec;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.EventChannel.EventSink;
+import io.flutter.plugin.common.EventChannel.StreamHandler;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.MethodCall;
+
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -54,6 +70,8 @@ public class MiMessageReceiver extends PushMessageReceiver {
     private String mAccount;
     private String mStartTime;
     private String mEndTime;
+    private BasicMessageChannel<String> messageChannel;
+    private static final String PUSH_CHANNEL = "info.shifang.flutterpush/push";
 
     @Override
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
@@ -94,6 +112,7 @@ public class MiMessageReceiver extends PushMessageReceiver {
     @Override
     public void onNotificationMessageArrived(Context context, MiPushMessage message) {
         Log.v("BaseApplication.TAG", "onNotificationMessageArrived is called. " + message.toString());
+        // messageChannel = new BasicMessageChannel<>(getFlutterView(), PUSH_CHANNEL, StringCodec.INSTANCE);
         // String log = context.getString("R.string.arrive_notification_message", message.getContent());
         // MainActivity.logList.add(0, getSimpleDate() + " " + log);
 
@@ -105,7 +124,7 @@ public class MiMessageReceiver extends PushMessageReceiver {
 
         Message msg = Message.obtain();
         // msg.obj = log;
-        // BaseApplication.getHandler().sendMessage(msg);
+        BaseApplication.getHandler().sendMessage(msg);
     }
 
     @Override

@@ -1,13 +1,17 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
+  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter MiPush Demo',
       theme: new ThemeData(
         // This is the theme of your application.
         //
@@ -25,6 +29,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  
   MyHomePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -43,6 +48,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // static const platform = const MethodChannel('samples.flutter.io/battery');
+  static const String PUSH_CHANNEL = "info.shifang.flutterpush/push";
+  static const BasicMessageChannel<String> platform = const BasicMessageChannel<String>(PUSH_CHANNEL, const StringCodec());
+  // static const EventChannel eventChannel = EventChannel('samples.flutter.io/charging');
+  // String _chargingStatus = 'Battery status: unknown.';
+  
+  @override
+  void initState() {
+    super.initState();
+    platform.setMessageHandler(_handlePlatformMessage);
+    // eventChannel.receiveBroadcastStream().listen(_onEvent, onError: _onError);
+  }
+
+  Future<String> _handlePlatformMessage(String message) async {
+    print(message);
+    Map pushData =  json.decode(message);
+    print(pushData);
+    return null;
+  }
+  // void _onEvent(Object event) {
+  //   setState(() {
+  //     _chargingStatus =
+  //         "Battery status: ${event == 'charging' ? '' : 'dis'}charging.";
+  //   });
+  // }
+
+  // void _onError(Object error) {
+  //   setState(() {
+  //     _chargingStatus = 'Battery status: unknown.';
+  //   });
+  // }
+
   int _counter = 0;
 
   void _incrementCounter() {
