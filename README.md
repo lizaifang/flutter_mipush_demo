@@ -1,6 +1,6 @@
 # flutter_mipush
 
-A new Flutter project.
+A Flutter project with PushService from XiaoMi.
 
 ## Getting Started
 
